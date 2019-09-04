@@ -22,6 +22,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -40,7 +42,7 @@ public class AllpostsFragment extends Fragment {
     private CollectionReference mPostsCollection=db.collection("posts");
     private Query mQuery=mPostsCollection.orderBy("plate", Query.Direction.DESCENDING);
     private FirestorePagingAdapter<Post,PostViewHolder> mAdapter;
-    private ArrayList<String> postslist=new ArrayList<>();
+    private HashMap<Integer,Post> postslist=new HashMap<>();
 
     @Nullable
     @Override
@@ -114,15 +116,22 @@ public class AllpostsFragment extends Fragment {
         mAdapter=new FirestorePagingAdapter<Post, PostViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull PostViewHolder postViewHolder, int i, @NonNull final Post post) {
-                //Log.i("TEST",String.valueOf(post.plate));
-                Log.i("TEST",String.valueOf(postslist));
                 final int position=i;
-                postslist.add(i,post.plate);
+                postslist.put(position,post);
                 postViewHolder.bind(post);
                 postViewHolder.linearLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       // Toast.makeText(getContext(),"Clicked"+String.valueOf(postslist.get(position).plate),Toast.LENGTH_SHORT).show();
+                        Post e=postslist.get(position);
+                        Log.i("ITER",String.valueOf(position));
+                        Log.i("ITER","---------------");
+                        Log.i("ITER",String.valueOf(postslist.size()));
+                        if (e!=null){
+                            Toast.makeText(getContext(),e.plate,Toast.LENGTH_SHORT).show();
+                        }else
+                        {
+                            Toast.makeText(getContext(),"is null LOL",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             }
