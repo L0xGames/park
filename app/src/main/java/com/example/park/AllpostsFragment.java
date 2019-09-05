@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
@@ -34,7 +36,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-public class AllpostsFragment extends Fragment {
+public class AllpostsFragment extends Fragment implements Filterable {
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFabAdd;
     private SwipeRefreshLayout mSwipeRefreshLayout;
@@ -90,6 +92,7 @@ public class AllpostsFragment extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                Log.i("ITER","Listener triggered");
                 mAdapter.refresh();
             }
         });
@@ -107,10 +110,6 @@ public class AllpostsFragment extends Fragment {
                 .setLifecycleOwner(this)
                 .setQuery(mQuery, config, Post.class)
                 .build();
-
-        //TEST
-
-        //TEST ENDE
 
         // Instantiate Paging Adapter
         mAdapter=new FirestorePagingAdapter<Post, PostViewHolder>(options) {
@@ -178,5 +177,10 @@ public class AllpostsFragment extends Fragment {
         };
         //finally set adapter to mRecyclerView
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return null;
     }
 }
