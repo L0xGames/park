@@ -63,7 +63,8 @@ public class AllpostsFragment extends Fragment{
     private ProgressBar spinner;
     private SharedPreferences appSharedPrefs;
     Activity mActivity;
-    SearchView searchView;
+    private SearchView searchView;
+    private Boolean swiped=false;
 
     @Override
     public void onAttach(Context context) {
@@ -134,7 +135,7 @@ public class AllpostsFragment extends Fragment{
 
         //init refresh and add
         mFabAdd = getView().findViewById(R.id.fab_add);
-        //mSwipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
+        mSwipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
         //init Progress bar
         spinner=getView().findViewById(R.id.progressBar);
         //init new Recycler
@@ -166,13 +167,14 @@ public class AllpostsFragment extends Fragment{
 
 
         // Refresh Action on Swipe Refresh Layout
-       /* mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                swiped=true;
                 Log.i("ITER","Listener triggered");
-                mAdapter.refresh();
+                getFirestorePosts();
             }
-        });*/
+        });
     }
 
     private void getFirestorePosts(){
@@ -195,7 +197,18 @@ public class AllpostsFragment extends Fragment{
                             String json=gson.toJson(mAllposts);
                             editor.putString("SavedArray",json);
                             editor.commit();
+                            if (swiped==true){
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                Toast.makeText(mActivity,"Liste aktualisiert",Toast.LENGTH_SHORT).show();
+                                swiped=false;
+                            }
+
                         } else {
+                            if (swiped==true){
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                Toast.makeText(mActivity,"Konnte Liste nicht aktualisieren",Toast.LENGTH_SHORT).show();
+                                swiped=false;
+                            }
                             Log.w("FIREBASE", "Error getting documents.", task.getException());
                         }
                     }

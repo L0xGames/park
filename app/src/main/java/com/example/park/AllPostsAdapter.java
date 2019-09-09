@@ -1,6 +1,7 @@
 package com.example.park;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHolder> {
@@ -42,6 +46,19 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
             @Override
             public void onClick(View v) {
                 Toast.makeText(holder.plateView.getContext(),mAllPosts.get(position).plate,Toast.LENGTH_SHORT).show();
+                //pass datat to frag prepare
+                Bundle bundle=new Bundle();
+                bundle.putString("plate",mAllPosts.get(position).plate);
+                bundle.putString("phone",mAllPosts.get(position).phone);
+                bundle.putString("email",mAllPosts.get(position).email);
+                bundle.putString("describtion",mAllPosts.get(position).describtion);
+                Fragment fragment=new FullPostFragment();
+                fragment.setArguments(bundle);
+                //start fragment
+                Context context=holder.plateView.getContext();
+                FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.fragment_container,
+                        fragment).commit();
             }
         });
 
