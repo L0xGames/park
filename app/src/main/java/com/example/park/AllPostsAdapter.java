@@ -58,7 +58,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
                 Context context=holder.plateView.getContext();
                 FragmentManager fm = ((FragmentActivity)context).getSupportFragmentManager();
                 fm.beginTransaction().replace(R.id.fragment_container,
-                        fragment).commit();
+                        fragment).addToBackStack( "tag" ).commit();
             }
         });
 
