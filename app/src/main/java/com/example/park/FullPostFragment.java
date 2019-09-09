@@ -21,6 +21,13 @@ public class FullPostFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().findViewById(R.id.search_view).setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        getActivity().findViewById(R.id.search_view).setVisibility(View.VISIBLE);
     }
 
     @Override
