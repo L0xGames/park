@@ -1,5 +1,4 @@
 package com.example.park;
-
 public class Post {
     public String plate;
     public String describtion;
