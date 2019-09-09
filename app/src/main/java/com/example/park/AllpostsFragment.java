@@ -106,7 +106,7 @@ public class AllpostsFragment extends Fragment implements Filterable {
                 .setPageSize(10)
                 .build();
         // Init Adapter Configuration
-        FirestorePagingOptions options = new FirestorePagingOptions.Builder<Post>()
+        final FirestorePagingOptions options = new FirestorePagingOptions.Builder<Post>()
                 .setLifecycleOwner(this)
                 .setQuery(mQuery, config, Post.class)
                 .build();
@@ -183,4 +183,15 @@ public class AllpostsFragment extends Fragment implements Filterable {
     public Filter getFilter() {
         return null;
     }
+    private Filter exampleFilter= new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return null;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+        }
+    };
 }
