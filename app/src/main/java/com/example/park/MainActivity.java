@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
 
         //NAv drawer setup
@@ -198,21 +200,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             city.put("describtion", "Here we go again");
             city.put("email", "danyburnage@googlemail.com"+String.valueOf(num));
             city.put("phone", String.valueOf(num));
+            city.put("username",mAuth.getCurrentUser().getUid());
 
-            db.collection("posts").document(mAuth.getCurrentUser().getUid()+String.valueOf(j))
-                    .set(city)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            Log.d("TEST", "DocumentSnapshot successfully written!");
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.w("TEST", "Error writing document", e);
-                        }
-                    });
+            db.collection("posts").add(city).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                @Override
+                public void onSuccess(DocumentReference documentReference) {
+                    Log.d("TEST","DONE");
+                }
+            });
         }
     }
 }

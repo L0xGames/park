@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,15 +10,18 @@
         android:layout_height="140dp"
         android:background="@color/colorPrimary">
 
-        <TextView
-            android:id="@+id/full_platetextview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="45dp"
+        <EditText
+            android:id="@+id/plate_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:ems="10"
             android:gravity="center_horizontal"
-            android:text="SB-KD-2408"
+            android:hint="Kennzeichen..."
+            android:inputType="textPersonName"
             android:textSize="36sp"
-            android:textStyle="bold" />
+            android:textStyle="bold|italic" />
+
     </FrameLayout>
 
     <TextView
@@ -30,15 +34,23 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/full_describtiontextview"
+    <EditText
+        android:id="@+id/descr_editText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:paddingTop="5dp"
-        android:textSize="15sp"
-        android:textStyle="italic" />
+        android:layout_marginTop="5dp"
+        android:autoLink="all"
+        android:gravity="top|left"
+        android:hint="Schreib etwas..."
+        android:inputType="textMultiLine|textCapSentences"
+        android:lines="5"
+        android:maxLines="10"
+        android:minLines="1"
+        android:scrollbars="none" />
 
     <TextView
         android:id="@+id/full_fixcontacttextview"
@@ -50,20 +62,33 @@
         android:textSize="24sp"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/full_phonetextview"
+    <EditText
+        android:id="@+id/editText_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:paddingTop="5dp"
-        android:textSize="15sp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:ems="10"
+        android:hint="Telefon"
+        android:inputType="phone" />
 
-    <TextView
-        android:id="@+id/full_emailtextview"
+    <EditText
+        android:id="@+id/editText_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:paddingTop="5dp"
-        android:textSize="15sp" />
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:ems="10"
+        android:hint="E-Mail"
+        android:inputType="textEmailAddress" />
+
+    <Button
+        android:id="@+id/button_savepost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:text="Speichern" />
 
 </LinearLayout>

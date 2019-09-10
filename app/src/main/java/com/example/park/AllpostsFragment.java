@@ -56,8 +56,6 @@ public class AllpostsFragment extends Fragment{
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference mPostsCollection=db.collection("posts");
     private Query mQuery=mPostsCollection.orderBy("plate", Query.Direction.DESCENDING);
-    private FirestorePagingAdapter<Post,PostViewHolder> mAdapter;
-    private HashMap<Integer,Post> postslist=new HashMap<>();
     private ArrayList<Post> mAllposts;
     AllPostsAdapter allPostsAdapter;
     private ProgressBar spinner;
@@ -91,12 +89,7 @@ public class AllpostsFragment extends Fragment{
                     mAllposts.add(doc.toObject(Post.class));
                 }
                 //save to shared prefs
-                appSharedPrefs= PreferenceManager.getDefaultSharedPreferences(mActivity);
-                SharedPreferences.Editor editor=appSharedPrefs.edit();
-                Gson gson=new Gson();
-                String json=gson.toJson(mAllposts);
-                editor.putString("SavedArray",json);
-                editor.commit();
+                write_prefs();
 
             }
         });
@@ -160,6 +153,8 @@ public class AllpostsFragment extends Fragment{
         }else{
             spinner.setVisibility(View.VISIBLE);
             getFirestorePosts();
+            //removing null from prefsshared
+            mAllposts=new ArrayList<>();
             allPostsAdapter=new AllPostsAdapter(mAllposts);
             mRecyclerView.setAdapter(allPostsAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -184,6 +179,7 @@ public class AllpostsFragment extends Fragment{
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            mAllposts.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 mAllposts.add(document.toObject(Post.class));
                                 Log.d("FIREBASE", "f");
@@ -191,12 +187,8 @@ public class AllpostsFragment extends Fragment{
                             allPostsAdapter.notifyDataSetChanged();
                             spinner.setVisibility(View.GONE);
                             //save to shared prefs
-                            appSharedPrefs= PreferenceManager.getDefaultSharedPreferences(mActivity);
-                            SharedPreferences.Editor editor=appSharedPrefs.edit();
-                            Gson gson=new Gson();
-                            String json=gson.toJson(mAllposts);
-                            editor.putString("SavedArray",json);
-                            editor.commit();
+                            write_prefs();
+
                             if (swiped==true){
                                 mSwipeRefreshLayout.setRefreshing(false);
                                 Toast.makeText(mActivity,"Liste aktualisiert",Toast.LENGTH_SHORT).show();
@@ -213,6 +205,14 @@ public class AllpostsFragment extends Fragment{
                         }
                     }
                 });
+    }
+    private void write_prefs(){
+        appSharedPrefs= PreferenceManager.getDefaultSharedPreferences(mActivity);
+        SharedPreferences.Editor editor=appSharedPrefs.edit();
+        Gson gson=new Gson();
+        String json=gson.toJson(mAllposts);
+        editor.putString("SavedArray",json);
+        editor.commit();
     }
 
 }
