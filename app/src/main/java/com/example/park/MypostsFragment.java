@@ -16,12 +16,9 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,8 +29,6 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,11 +55,6 @@ public class MypostsFragment extends Fragment {
     private Boolean swiped = false;
 
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_myposts, container, false);
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -78,7 +68,6 @@ public class MypostsFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         //Listen for changes in Datatbase
         mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -87,20 +76,27 @@ public class MypostsFragment extends Fragment {
                     Log.w("ERROR", "Listen failed.", e);
                     return;
                 }
+                mAllposts=new ArrayList<>();
                 mAllposts.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     mAllposts.add(doc.toObject(Post.class));
                 }
                 //save to shared prefs
                 write_prefs();
-
             }
         });
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_myposts,container,false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         //add Button
         mFabAdd=getView().findViewById(R.id.fab_add_my);
         mFabAdd.setOnClickListener(new View.OnClickListener() {
@@ -127,12 +123,13 @@ public class MypostsFragment extends Fragment {
         });
 
         //init refresh and add
+        Log.i("TEST","2");
         mFabAdd = getView().findViewById(R.id.fab_add_my);
         mSwipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout_my);
         //init Progress bar
         spinner = getView().findViewById(R.id.progressBar_my);
         //init new Recycler
-        mAllposts = new ArrayList<>();
+        mAllposts=new ArrayList<>();
         mRecyclerView = getView().findViewById(R.id.recyclerview_posts_my);
         mRecyclerView.setHasFixedSize(true);
 
@@ -145,12 +142,14 @@ public class MypostsFragment extends Fragment {
         mAllposts = gson.fromJson(json, type);
 
         if (mAllposts != null) {
+            Log.i("TEST","FIF");
             spinner.setVisibility(View.INVISIBLE);
             allPostsAdapter = new AllPostsAdapter(mAllposts);
             mRecyclerView.setAdapter(allPostsAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         } else {
+            Log.i("TEST","SIF");
             spinner.setVisibility(View.VISIBLE);
             getMyFirestorePosts();
             //removing null from prefsshared

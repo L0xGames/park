@@ -42,6 +42,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
         plateView.setText(post.plate);
         descrView.setText(post.describtion);
 
+
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -80,6 +81,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
             plateView=itemView.findViewById(R.id.license_plate_textView);
             descrView=itemView.findViewById(R.id.describtion_textView);
         }
+
     }
     private List<Post> mAllPosts,itemsCopy;
 
@@ -101,4 +103,5 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
         }
         notifyDataSetChanged();
     }
+
 }
