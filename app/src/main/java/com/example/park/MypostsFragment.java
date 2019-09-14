@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -29,9 +31,11 @@ import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,13 +51,12 @@ public class MypostsFragment extends Fragment {
     private CollectionReference mPostsCollection = db.collection("posts");
     private Query mQuery = mPostsCollection.whereEqualTo("username", uid);
     private ArrayList<Post> mAllposts;
-    AllPostsAdapter allPostsAdapter;
+    MyPostsAdapter allPostsAdapter;
     private ProgressBar spinner;
     private SharedPreferences appSharedPrefs;
     Activity mActivity;
     private SearchView searchView;
     private Boolean swiped = false;
-
 
 
     @Override
@@ -144,7 +147,7 @@ public class MypostsFragment extends Fragment {
         if (mAllposts != null) {
             Log.i("TEST","FIF");
             spinner.setVisibility(View.INVISIBLE);
-            allPostsAdapter = new AllPostsAdapter(mAllposts);
+            allPostsAdapter = new MyPostsAdapter(mAllposts);
             mRecyclerView.setAdapter(allPostsAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -154,7 +157,7 @@ public class MypostsFragment extends Fragment {
             getMyFirestorePosts();
             //removing null from prefsshared
             mAllposts = new ArrayList<>();
-            allPostsAdapter = new AllPostsAdapter(mAllposts);
+            allPostsAdapter = new MyPostsAdapter(mAllposts);
             mRecyclerView.setAdapter(allPostsAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         }

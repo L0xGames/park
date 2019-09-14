@@ -15,7 +15,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.common.reflect.TypeToken;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
@@ -38,7 +37,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class AllpostsFragment extends Fragment{
     private RecyclerView mRecyclerView;
-    private FloatingActionButton mFabAdd;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference mPostsCollection=db.collection("posts");
@@ -114,7 +112,6 @@ public class AllpostsFragment extends Fragment{
         });
 
         //init refresh and add
-        mFabAdd = getView().findViewById(R.id.fab_add);
         mSwipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout);
         //init Progress bar
         spinner=getView().findViewById(R.id.progressBar);
