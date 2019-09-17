@@ -129,7 +129,6 @@ public class AllpostsFragment extends Fragment{
         String json=sharedPreferences.getString("SavedArray","");
         Type type = new TypeToken<ArrayList<Post>>(){}.getType();
         mAllposts = gson.fromJson(json, type);
-
         if (mAllposts!=null){
             spinner.setVisibility(View.INVISIBLE);
             allPostsAdapter=new AllPostsAdapter(mAllposts);

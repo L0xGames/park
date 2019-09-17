@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DrawerLayout drawer;
     private TextView ActionBarTitle;
+    NavigationView navigationView;
 
     @Override
     protected void onStart() {
@@ -65,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //continue drawer setup
         setSupportActionBar(toolbar);
         drawer=findViewById(R.id.drawer_layout);
-        NavigationView navigationView=findViewById(R.id.nav_view);
+        navigationView=findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         ActionBarDrawerToggle toggle =new ActionBarDrawerToggle(this,drawer,toolbar,
                 R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -83,7 +84,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FirebaseUser user=firebaseAuth.getCurrentUser();
                 if (user!=null){
                     //User is already signed in
-                    Log.i("TEST",user.getUid());
+                    //first fragment is our main fragment when you start app
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new AllpostsFragment()).commit();
+                    navigationView.setCheckedItem(R.id.nav_allposts);
                 }
                 else{
                     //not signed in
@@ -95,14 +99,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     .setLogo(R.drawable.ic_launcher_foreground)
                                     .build(),
                             RC_SIGN_IN);
+                    //first fragment is our main fragment when you start app
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                            new AllpostsFragment()).commit();
+                    navigationView.setCheckedItem(R.id.nav_allposts);
                 }
             }
         };
-        //first fragment is our main fragment when you start app
-        if (savedInstanceState==null){
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new AllpostsFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_allposts);}
 
     }
 
