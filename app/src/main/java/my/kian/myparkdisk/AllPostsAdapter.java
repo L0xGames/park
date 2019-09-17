@@ -3,7 +3,6 @@ package my.kian.myparkdisk;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -56,8 +55,7 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
         View rowpostView = inflater.inflate(R.layout.item_post, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(rowpostView);
-        return viewHolder;
+        return new ViewHolder(rowpostView);
     }
 
     @Override

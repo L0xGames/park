@@ -28,8 +28,7 @@ public class MyPostsAdapter extends AllPostsAdapter{
         View rowpostView = inflater.inflate(R.layout.item_posts_delete, parent, false);
 
         // Return a new holder instance
-        ViewHolder viewHolder = new ViewHolder(rowpostView);
-        return viewHolder;
+        return new ViewHolder(rowpostView);
     }
 
 }
