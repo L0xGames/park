@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -7,26 +7,30 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import my.kian.myparkdisk.R;
 import com.firebase.ui.auth.AuthUI;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -35,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DrawerLayout drawer;
     private TextView ActionBarTitle;
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     @Override
     protected void onStart() {
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
 
-
+        //Firestore db
+        FirebaseApp.initializeApp(this);
         //NAv drawer setup
         Toolbar toolbar=findViewById(R.id.toolbar);
         //action bar set current city
@@ -76,14 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        //first fragment is our main fragment when you start app
-        if (savedInstanceState==null){
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new AllpostsFragment()).commit();
-        navigationView.setCheckedItem(R.id.nav_allposts);}
 
-        //Firestore db
-        FirebaseApp.initializeApp(this);
 
         //Firebase UI-Auth
         mAuth=FirebaseAuth.getInstance();
@@ -108,10 +105,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         };
+        //first fragment is our main fragment when you start app
+        if (savedInstanceState==null){
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new AllpostsFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_allposts);}
 
     }
 
     private String getCurrCity() {
+        //adding multi city support later
         return "Saarbrücken";
     }
 
@@ -125,29 +128,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-
-    private void create_post(){
-        Map<String, Object> city = new HashMap<>();
-        city.put("name", "Los Angeles");
-        city.put("state", "CA");
-        city.put("country", "USA");
-
-        db.collection("cities").document(mAuth.getCurrentUser().getUid())
-                .set(city)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TEST", "DocumentSnapshot successfully written!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w("TEST", "Error writing document", e);
-                    }
-                });
-    }
-
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -160,33 +140,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         new MypostsFragment()).commit();
                 break;
             case R.id.nav_help:
-                Toast.makeText(this,"HELP",Toast.LENGTH_SHORT);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new HelpFragment()).commit();
+                break;
+            case R.id.nav_signout:
+                mAuth.signOut();
+                Toast.makeText(this,"Ausgeloggt",Toast.LENGTH_LONG).show();
+                break;
+            case R.id.nav_rate:
+                launchMarket();
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
 
         return true;
     }
-    private void create_random_posts(){
-        Random random=new Random();
-        for (int j=0;j<50;j++){
-            char c= (char) (random.nextInt(25)+65);
-            char b= (char) (random.nextInt(25)+65);
-            int num=random.nextInt();
-            String licenseplate= String.valueOf(c+b+num);
-            Map<String, Object> city = new HashMap<>();
-            city.put("plate", "SB"+licenseplate);
-            city.put("describtion", "Here we go again");
-            city.put("email", "danyburnage@googlemail.com"+String.valueOf(num));
-            city.put("phone", String.valueOf(num));
-            city.put("username",mAuth.getCurrentUser().getUid());
 
-            db.collection("posts").add(city).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                @Override
-                public void onSuccess(DocumentReference documentReference) {
-                    Log.d("TEST","DONE");
-                }
-            });
+    private void launchMarket() {
+        Uri uri = Uri.parse("market://details?id=" + getPackageName());
+        Intent myAppLinkToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        try {
+            startActivity(myAppLinkToMarket);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "Google Play Store nicht gefunden", Toast.LENGTH_LONG).show();
         }
     }
 }

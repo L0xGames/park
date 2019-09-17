@@ -1,8 +1,10 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import my.kian.myparkdisk.R;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

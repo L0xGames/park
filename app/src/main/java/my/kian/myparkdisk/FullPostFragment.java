@@ -1,14 +1,15 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import my.kian.myparkdisk.R;
 
 import java.util.Random;
 
@@ -42,7 +43,6 @@ public class FullPostFragment extends Fragment {
         descr_view=getView().findViewById(R.id.full_describtiontextview);
         //random colour
         String new_color=colors[random.nextInt(colors.length)];
-        Log.i("COLOR",new_color);
         frameLayout.setBackgroundColor(Color.parseColor(new_color));
         //assign everything
         plate_view.setText(plate);

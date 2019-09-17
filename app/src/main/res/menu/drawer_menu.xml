@@ -6,25 +6,29 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_allposts"
-            android:icon="@drawable/ic_account_balance"
-            android:title="All Posts" />
+            android:icon="@drawable/license_plate"
+            android:title="@string/drawer_1" />
         <item
             android:id="@+id/nav_myposts"
             android:icon="@drawable/ic_account_circle"
-            android:title="My Posts" />
+            android:title="@string/drawer_2" />
         <item
             android:id="@+id/nav_help"
             android:icon="@drawable/ic_help_black_24dp"
-            android:title="Help" />
+            android:title="@string/drawer_3" />
+        <item
+            android:id="@+id/nav_signout"
+            android:icon="@drawable/sign_out_icon"
+            android:title="@string/drawer_5" />
 
     </group>
 
-    <item android:title="Share">
+    <item android:title="@string/drawer_divider">
         <menu>
             <item
                 android:id="@+id/nav_rate"
                 android:icon="@drawable/ic_star"
-                android:title="Rate us" />
+                android:title="@string/drawer_4" />
         </menu>
     </item>
 

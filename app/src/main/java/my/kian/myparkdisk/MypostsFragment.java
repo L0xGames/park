@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,14 +7,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import my.kian.myparkdisk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,14 +27,10 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.List;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.PopupMenu;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,13 +38,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MypostsFragment extends Fragment {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String uid = mAuth.getCurrentUser().getUid();
+    private String uid;
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFabAdd;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference mPostsCollection = db.collection("posts");
-    private Query mQuery = mPostsCollection.whereEqualTo("username", uid);
+    private Query mQuery = mPostsCollection;
     private ArrayList<Post> mAllposts;
     MyPostsAdapter allPostsAdapter;
     private ProgressBar spinner;
@@ -70,14 +65,19 @@ public class MypostsFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uid = mAuth.getCurrentUser().getUid();
 
         //Listen for changes in Datatbase
-        mQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        mQuery.whereEqualTo("username", uid).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w("ERROR", "Listen failed.", e);
                     return;
+                }
+                //get uid again
+                if (mAuth.getCurrentUser()!=null){
+                    uid = mAuth.getCurrentUser().getUid();
                 }
                 mAllposts=new ArrayList<>();
                 mAllposts.clear();
@@ -126,7 +126,6 @@ public class MypostsFragment extends Fragment {
         });
 
         //init refresh and add
-        Log.i("TEST","2");
         mFabAdd = getView().findViewById(R.id.fab_add_my);
         mSwipeRefreshLayout = getView().findViewById(R.id.swipeRefreshLayout_my);
         //init Progress bar
@@ -145,14 +144,12 @@ public class MypostsFragment extends Fragment {
         mAllposts = gson.fromJson(json, type);
 
         if (mAllposts != null) {
-            Log.i("TEST","FIF");
             spinner.setVisibility(View.INVISIBLE);
             allPostsAdapter = new MyPostsAdapter(mAllposts);
             mRecyclerView.setAdapter(allPostsAdapter);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         } else {
-            Log.i("TEST","SIF");
             spinner.setVisibility(View.VISIBLE);
             getMyFirestorePosts();
             //removing null from prefsshared
@@ -168,21 +165,22 @@ public class MypostsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 swiped = true;
-                Log.i("ITER", "Listener triggered");
                 getMyFirestorePosts();
             }
         });
     }
 
     private void getMyFirestorePosts() {
-        mQuery.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        if (mAuth.getCurrentUser()!=null){
+            uid = mAuth.getCurrentUser().getUid();
+        }
+        mQuery.whereEqualTo("username", uid).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if (task.isSuccessful()) {
                     mAllposts.clear();
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         mAllposts.add(document.toObject(Post.class));
-                        Log.d("FIREBASE", "f");
                     }
                     allPostsAdapter.notifyDataSetChanged();
                     spinner.setVisibility(View.GONE);

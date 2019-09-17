@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import my.kian.myparkdisk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.reflect.TypeToken;
@@ -150,7 +151,6 @@ public class AllpostsFragment extends Fragment{
             @Override
             public void onRefresh() {
                 swiped=true;
-                Log.i("ITER","Listener triggered");
                 getFirestorePosts();
             }
         });
@@ -166,7 +166,6 @@ public class AllpostsFragment extends Fragment{
                             mAllposts.clear();
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 mAllposts.add(document.toObject(Post.class));
-                                Log.d("FIREBASE", "f");
                             }
                             allPostsAdapter.notifyDataSetChanged();
                             spinner.setVisibility(View.GONE);

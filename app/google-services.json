@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:552313349995:android:7769833decd47b78",
+        "mobilesdk_app_id": "1:552313349995:android:7057aa1ba5597409f68e2e",
         "android_client_info": {
-          "package_name": "com.example.park"
+          "package_name": "my.kian.myparkdisk"
         }
       },
       "oauth_client": [
         {
-          "client_id": "552313349995-dc1if2q3nt304oghjq31tlp6cfso1fs4.apps.googleusercontent.com",
+          "client_id": "552313349995-8v7i4aqpm4ggl2km6kpgdhnnkm31brn1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.park",
+            "package_name": "my.kian.myparkdisk",
             "certificate_hash": "043f04e6747cb8dcbcbc84a8e6e11b940c73a3b2"
           }
         },

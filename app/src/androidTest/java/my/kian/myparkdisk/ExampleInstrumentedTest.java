@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.content.Context;
 import androidx.test.InstrumentationRegistry;

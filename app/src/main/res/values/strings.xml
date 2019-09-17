@@ -1,8 +1,28 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">MyParkDisk</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="faq_1">Warum gibt es diese App?</string>
+    <string name="faq_1_a">Die Idee ist es eine digitale Parkscheibe zu erschaffen! Auch wenn du es eilig hast und nicht den perfekten
+        Parkplatz gefunden hast, kannst du so eine Nachricht hinterlassen. Umgekehrt gilt das selbe: Falls du mal zugeparkt wurdest, kannst
+        du zuerst in der App nach dem Kennzeichen suchen bevor du den Abschlepper rufst ;)
+    </string>
+    <string name="faq_2">Wie funktioniert diese App?</string>
+    <string name="faq_2_a">Du kannst im "Kennzeichen" Tab alle Kennzeichen einsehen und nach bestimmten suchen. Willst du selber eins
+        hinzufügen oder dein eigenes Kennzeichen löschen, kannst du dies in dem "Meine Kennzeichen" Tab erledigen.
+    </string>
+    <string name="faq_3">Wird meine Handynummer gespeichert?</string>
+    <string name="faq_3_a">Deine Handynummer und Email werden nicht gespeichert. Sobald du dein Kennzeichen löschst
+    werden alle Kontaktdaten mit gelöscht!
+    </string>
+    <string name="faq_4">Ich habe ein Problem!</string>
+    <string name="faq_4_a">Falls du Probleme hast mit der App bzw Bugs gefunden hast, kannst du dich unter
+        dieser Email melden: parkappbugs@gmail.com
+    </string>
+    <string name="drawer_1">Kennzeichen</string>
+    <string name="drawer_2">Meine Kennzeichen</string>
+    <string name="drawer_3">Hilfe</string>
+    <string name="drawer_4">App bewerten</string>
+    <string name="drawer_5">Ausloggen</string>
+    <string name="drawer_divider">Teilen</string>
 </resources>

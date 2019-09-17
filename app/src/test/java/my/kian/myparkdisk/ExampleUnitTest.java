@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import org.junit.Test;
 

@@ -1,17 +1,15 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+
+import my.kian.myparkdisk.R;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.PopupMenu;
 
 //create different Adapter to use different row-Layout
 public class MyPostsAdapter extends AllPostsAdapter{

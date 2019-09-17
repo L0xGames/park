@@ -1,4 +1,4 @@
-package com.example.park;
+package my.kian.myparkdisk;
 public class Post {
     public String plate;
     public String describtion;

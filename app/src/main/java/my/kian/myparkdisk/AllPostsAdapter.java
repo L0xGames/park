@@ -1,20 +1,19 @@
-package com.example.park;
+package my.kian.myparkdisk;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import my.kian.myparkdisk.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,13 +39,16 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHolder> {
     Context context;
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
-    private String uid = mAuth.getCurrentUser().getUid();
+    private String uid;
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private CollectionReference mPostsCollection = db.collection("posts");
-    private Query mQuery = mPostsCollection.whereEqualTo("username", uid);
+    private Query mQuery= mPostsCollection;
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (mAuth.getCurrentUser()!=null){
+            uid = mAuth.getCurrentUser().getUid();
+        }
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
@@ -71,7 +73,6 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.plateView.getContext(),mAllPosts.get(position).plate,Toast.LENGTH_SHORT).show();
                 //pass datat to frag prepare
                 Bundle bundle=new Bundle();
                 bundle.putString("plate",mAllPosts.get(position).plate);
@@ -103,14 +104,19 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
                         public boolean onMenuItemClick(MenuItem item) {
                             switch (item.getItemId()) {
                                 case R.id.menu_custom_delete:
-                                    new AlertDialog.Builder(holder.buttonOptions.getContext()).setTitle("Delete Entry").setMessage("Are you sure?")
+                                    //get uid again
+                                    if (mAuth.getCurrentUser()!=null){
+                                        uid = mAuth.getCurrentUser().getUid();
+                                    }
+                                    new AlertDialog.Builder(holder.buttonOptions.getContext()).setTitle("Kennzeichen löschen").setMessage("Bist du sicher?")
                                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
                                                     Post remove_post=mAllPosts.get(holder.getAdapterPosition());
                                                     //get post for removing
-                                                    mQuery.whereEqualTo("plate",remove_post.plate).whereEqualTo("email",remove_post.email)
+                                                    mQuery.whereEqualTo("username",remove_post.username).whereEqualTo("plate",remove_post.plate)
                                                             .whereEqualTo("phone",remove_post.phone).whereEqualTo("describtion",remove_post.describtion)
+                                                            .whereEqualTo("email",remove_post.email)
                                                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -120,12 +126,12 @@ public class AllPostsAdapter extends RecyclerView.Adapter<AllPostsAdapter.ViewHo
                                                                     remove_db(document.getId(),holder.buttonOptions.getContext());
                                                                 }
                                                             }
-                                                            else{}
+                                                            else{
+                                                            }
                                                         }
                                                     });
                                                     mAllPosts.remove(holder.getAdapterPosition());
                                                     notifyItemRemoved(holder.getAdapterPosition());
-                                                    Toast.makeText(holder.buttonOptions.getContext(),"TEST",Toast.LENGTH_LONG).show();
                                                 }
                                             }).setNegativeButton(android.R.string.no,null).setIcon(android.R.drawable.ic_dialog_alert).show();
                                     return true;
